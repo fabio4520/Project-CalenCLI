@@ -101,7 +101,7 @@ events = [
     "calendar" => "web-dev" },
 ]
 
-# Methods  Añadiendo los metodos mínimos que se necesitarán usar (si se necesitan más lo añadimos luego)
+# ============= Methods  Añadiendo los metodos mínimos que se necesitarán usar (si se necesitan más lo añadimos luego)
 
 def create_event(arguments)
 
@@ -135,4 +135,9 @@ def exit()
 
 end
 
-# Main Program
+# ============= Methods ends
+
+# ============= Main Program starts
+
+
+# ============= Main Program starts
