@@ -1,4 +1,10 @@
+<<<<<<< HEAD
+require 'date'
+
+# Data
+=======
 # ==============Data start
+>>>>>>> 71e5d2b1b6073e3c09166cc0b53c2790ab88282b
 id = 0
 
 ##======FECHA
@@ -98,8 +104,10 @@ def update_event(argument)
 
 end
 
-def delete_event()
-
+def delete_event(event_id)
+  events.delete(events[event_id])
+  list_actions
+  
 end 
 
 def next_week(arguement)
@@ -117,7 +125,6 @@ end
 # ============= Methods ends
 
 # ============= Main Program starts
-
 
 # ============= Main Program starts
 
