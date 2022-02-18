@@ -1,17 +1,8 @@
-<<<<<<< HEAD
 require 'date'
-
-# Data
-=======
 # ==============Data start
->>>>>>> 71e5d2b1b6073e3c09166cc0b53c2790ab88282b
 id = 0
 
 ##======FECHA
-
-
-
-
 
 events = [
   {"id" => 1,
@@ -21,17 +12,32 @@ events = [
       "id" => 1,
     "start_date" => "2021-11-15T00:00:00-05:00",
     
-    }
+    "id" => (id = id.next),
+    "start_date" => "2021-11-15T00:00:00-05:00",
+    "title" => "Ruby Basics 1",
+    "end_date" => "",
+    "notes" => "Ruby Basics 1 notes",
+    "guests" => %w[Teddy Codeka],
+    "calendar" => "web-dev" }
+    },
+    { "id" => (id = id.next),
+      "start_date" => "2021-11-15T12:00:00-05:00",
+      "title" => "English Course",
+      "end_date" => "2021-11-15T13:30:00-05:00",
+      "notes" => "English notes",
+      "guests" => ["Stephanie"],
+      "calendar" => "english" },
 ]
+
 # ============Data End============
 
-#==========Metothods- Start===========
+#==========Methods- Start===========
 # =========           ================
 
-# Metho ACTION MENU
+# Method ACTION MENU
 def print_actions_menu
   puts "-"*65
-  puts " action | create | show | update | delete | next | prev | next " 
+  puts " list | create | show | update | delete | next | prev | next " 
   puts ""
 end
 # ========= END A.M========
@@ -45,8 +51,9 @@ def events_list(events)
 end
 # ========= END M.E_L===========
 
-events_list(events) # LIST EVENT
-print_actions_menu # WATCH ACTIONS
+#events_list(events) # LIST EVENT
+
+#print_actions_menu # WATCH ACTIONS
 
 # ======== ACTION ==========
 action = nil
@@ -57,24 +64,40 @@ while action != "exit"
   case action
   # ===========LIST ACTION ===========
   when "list"
+    events_list(events)
+    print_actions_menu
     puts "list "
   # ========== CREATE action ======
   when "create"
+
+
+    #funciona de create pendiente
+    print_actions_menu
     puts "create"
   # ========== SHOW ACTION ===========
   when "show"
+
+    print_actions_menu
     puts "Event ID "
   # ========== Update Action=========
   when "update"
+
+    print_actions_menu
     puts "update"
   # ========== DELETE Action ==========
   when "delete"
+    delete_event()
+    print_actions_menu
     puts "Event ID"
   # =========== Next =========
   when "next"
+
+    print_actions_menu
     puts "next"
   # =========== Prev  =========
   when "prev"
+
+    print_actions_menu
     puts "prev"
   # ======== invalid action =====
   when "exit"
@@ -89,10 +112,26 @@ end
 # ============= Methods  Añadiendo los metodos mínimos que se necesitarán usar (si se necesitan más lo añadimos luego)
 
 def create_event(arguments)
+  print "date: "
+  date =  date = gets.chomp # YYYY-MM-DD (REQUIRED)
+  print "title: "
+  title = gets.chomp # TEXT (REQUIRED)
+  print "calendar: "
+  calendar = gets.chomp # tech/english/soft skills
+  print "start_end: "
+  start_end = gets.chomp # 23:00 23:30
+  print "notes: "
+  notes = gets.chomp # TEXT
+  print "guests: "
+  guests = gets.chomp # NAMES (fabio, leandro)
 
-end
+  
 
-def list_events
+  date_arr = date.split("-").map(&:to_i)
+  start_end_arr = start_end.split(/[\s,:]/).map(&:to_i) # los separo por espacio(\s) y por ":"
+
+  start_date = DateTime.new(date_arr[0],date_arr[1],date_arr[2],start_end_arr[0],start_end_arr[1], 0,"-5").to_s
+  end_date = DateTime.new(date_arr[0],date_arr[1],date_arr[2],start_end_arr[2],start_end_arr[3], 0,"-5").to_s
 
 end
 
@@ -118,9 +157,6 @@ def prev_week(argument)
 
 end
 
-def exit()
-
-end
 
 # ============= Methods ends
 
