@@ -1,105 +1,84 @@
-# Data
+# ==============Data start
 id = 0
+
+##======FECHA
+
+
+
+
+
 events = [
-  { "id" => (id = id.next),
+  {"id" => 1,
     "start_date" => "2021-11-15T00:00:00-05:00",
-    "title" => "Ruby Basics 1",
-    "end_date" => "",
-    "notes" => "Ruby Basics 1 notes",
-    "guests" => %w[Teddy Codeka],
-    "calendar" => "web-dev" },
-  { "id" => (id = id.next),
-    "start_date" => "2021-11-15T12:00:00-05:00",
-    "title" => "English Course",
-    "end_date" => "2021-11-15T13:30:00-05:00",
-    "notes" => "English notes",
-    "guests" => ["Stephanie"],
-    "calendar" => "english" },
-  { "id" => (id = id.next),
-    "start_date" => "2021-11-16T00:00:00-05:00",
-    "title" => "Ruby Basics 2",
-    "end_date" => "",
-    "notes" => "Ruby Basics 2 notes",
-    "guests" => %w[Andre Codeka],
-    "calendar" => "web-dev" },
-  { "id" => (id = id.next),
-    "start_date" => "2021-11-16T12:45:00-05:00",
-    "title" => "Soft Skills - Mindsets",
-    "end_date" => "2021-11-15T13:30:00-05:00",
-    "notes" => "Some extra notes",
-    "guests" => ["Diego"],
-    "calendar" => "soft-skills" },
-  { "id" => (id = id.next),
-    "start_date" => "2021-11-17T00:00:00-05:00",
-    "title" => "Ruby Methods",
-    "end_date" => "",
-    "notes" => "Ruby Methods notes",
-    "guests" => %w[Diego Andre Teddy Codeka],
-    "calendar" => "web-dev" },
-  { "id" => (id = id.next),
-    "start_date" => "2021-11-17T12:00:00-05:00",
-    "title" => "English Course",
-    "end_date" => "2021-11-15T13:30:00-05:00",
-    "notes" => "English notes",
-    "guests" => ["Stephanie"],
-    "calendar" => "english" },
-  { "id" => (id = id.next),
-    "start_date" => "2021-11-18T09:00:00-05:00",
-    "title" => "Summary Workshop",
-    "end_date" => "2021-11-19T13:30:00-05:00",
-    "notes" => "A lot of notes",
-    "guests" => %w[Diego Teddy Andre Codeka],
-    "calendar" => "web-dev" },
-  { "id" => (id = id.next),
-    "start_date" => "2021-11-18T09:00:00-05:00",
-    "title" => "Extended Project",
-    "end_date" => "",
-    "notes" => "",
-    "guests" => [],
-    "calendar" => "web-dev" },
-  { "id" => (id = id.next),
-    "start_date" => "2021-11-19T09:00:00-05:00",
-    "title" => "Extended Project",
-    "end_date" => "",
-    "notes" => "",
-    "guests" => [],
-    "calendar" => "web-dev" },
-  { "id" => (id = id.next),
-    "start_date" => "2021-11-19T12:00:00-05:00",
-    "title" => "English for Engineers",
-    "end_date" => "2021-11-19T13:30:00-05:00",
-    "notes" => "English notes",
-    "guests" => ["Stephanie"],
-    "calendar" => "english" },
-  { "id" => (id = id.next),
-    "start_date" => "2021-11-20T10:00:00-05:00",
-    "title" => "Breakfast with my family",
-    "end_date" => "2021-11-20T11:00:00-05:00",
-    "notes" => "",
-    "guests" => [],
-    "calendar" => "default" },
-  { "id" => (id = id.next),
-    "start_date" => "2021-11-20T15:00:00-05:00",
-    "title" => "Study",
-    "end_date" => "2021-11-20T20:00:00-05:00",
-    "notes" => "",
-    "guests" => [],
-    "calendar" => "default" },
-  { "id" => (id = id.next),
-    "start_date" => "2021-11-25T09:00:00-05:00",
-    "title" => "Extended Project",
-    "end_date" => "",
-    "notes" => "",
-    "guests" => [],
-    "calendar" => "web-dev" },
-  { "id" => (id = id.next),
-    "start_date" => "2021-11-26T09:00:00-05:00",
-    "title" => "Extended Project",
-    "end_date" => "",
-    "notes" => "",
-    "guests" => [],
-    "calendar" => "web-dev" },
+    },
+    {
+      "id" => 1,
+    "start_date" => "2021-11-15T00:00:00-05:00",
+    
+    }
 ]
+# ============Data End============
+
+#==========Metothods- Start===========
+# =========           ================
+
+# Metho ACTION MENU
+def print_actions_menu
+  puts "-"*65
+  puts " action | create | show | update | delete | next | prev | next " 
+  puts ""
+end
+# ========= END A.M========
+# ========== M. EVENT_LIST==========
+def events_list(events)
+  puts "-----------------Welcome to CalendLi-------------"
+  puts ""
+  events.each do |event|
+  puts "#{event["id"]}. #{event["start_date"]}" 
+  end
+end
+# ========= END M.E_L===========
+
+events_list(events) # LIST EVENT
+print_actions_menu # WATCH ACTIONS
+
+# ======== ACTION ==========
+action = nil
+while action != "exit"
+  print "action:   "
+  action = gets.chomp 
+  #capture the action as a <string>
+  case action
+  # ===========LIST ACTION ===========
+  when "list"
+    puts "list "
+  # ========== CREATE action ======
+  when "create"
+    puts "create"
+  # ========== SHOW ACTION ===========
+  when "show"
+    puts "Event ID "
+  # ========== Update Action=========
+  when "update"
+    puts "update"
+  # ========== DELETE Action ==========
+  when "delete"
+    puts "Event ID"
+  # =========== Next =========
+  when "next"
+    puts "next"
+  # =========== Prev  =========
+  when "prev"
+    puts "prev"
+  # ======== invalid action =====
+  when "exit"
+    puts "Thanks for using calenCLI"
+  # ======== invalid action =====
+  else 
+    puts "invalid action"
+  end 
+end
+
 
 # ============= Methods  Añadiendo los metodos mínimos que se necesitarán usar (si se necesitan más lo añadimos luego)
 
@@ -141,3 +120,4 @@ end
 
 
 # ============= Main Program starts
+
