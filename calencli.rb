@@ -1,3 +1,5 @@
+require 'date'
+
 # Data
 id = 0
 events = [
@@ -119,8 +121,10 @@ def update_event(argument)
 
 end
 
-def delete_event()
-
+def delete_event(event_id)
+  events.delete(events[event_id])
+  list_actions
+  
 end 
 
 def next_week(arguement)
@@ -138,6 +142,5 @@ end
 # ============= Methods ends
 
 # ============= Main Program starts
-
 
 # ============= Main Program starts
