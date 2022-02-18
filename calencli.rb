@@ -3,7 +3,6 @@ require 'date'
 id = 0
 
 ##======FECHA
-
 events = [
   { "id" => (id = id.next),
     "start_date" => "2021-11-15T00:00:00-05:00",
@@ -118,12 +117,14 @@ def print_actions_menu
 end
 
 # =========           ================
-def events_list(events)
+def events_list
   puts "-----------------Welcome to CalendLi-------------"
   puts ""
-  events.each do |event|
-  puts "#{event["id"]}. #{event["start_date"]}" 
-  end
+  #events.each do |event|
+  print daynames[1][1..3]
+
+  #puts "#{event["id"]}. #{event["start_date"]}" 
+  
 end
 
 
@@ -164,22 +165,24 @@ end
 
 # =========           ================
 
-def show_event(argument)
+def show_event(show_id)
 
 end
 
 # =========           ================
 
 def update_event(argument)
+  
 
 end
 
 # =========           ================
 
-def delete_event(event_id)
-  events.delete(events[event_id])
-  list_actions
-  
+def delete_event(calendar,event_id)
+   for i in calendar
+    calendar.delete(i) if i["id"] == event_id.to_i
+  end  
+#  events.delete(events[event_id])
 end 
 
 # =========           ================
@@ -208,7 +211,7 @@ while action != "exit"
   case action
   # ===========LIST ACTION ===========
   when "list"
-    events_list(events)
+    events_list
     print_actions_menu
     puts "list "
   # ========== CREATE action ======
@@ -220,7 +223,10 @@ while action != "exit"
     puts "create"
   # ========== SHOW ACTION ===========
   when "show"
+    print "Event ID: "
+    show_id = gets.chomp
 
+    
     print_actions_menu
     puts "Event ID "
   # ========== Update Action=========
@@ -230,9 +236,12 @@ while action != "exit"
     puts "update"
   # ========== DELETE Action ==========
   when "delete"
-    delete_event()
+    
+    print "Event ID: "
+    delete_id = gets.chomp
+    delete_event(events, delete_id)
     print_actions_menu
-    puts "Event ID"
+
   # =========== Next =========
   when "next"
 
