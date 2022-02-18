@@ -80,3 +80,44 @@ while action != "exit"
 end
 
 
+# ============= Methods  Añadiendo los metodos mínimos que se necesitarán usar (si se necesitan más lo añadimos luego)
+
+def create_event(arguments)
+
+end
+
+def list_events
+
+end
+
+def show_event(argument)
+
+end
+
+def update_event(argument)
+
+end
+
+def delete_event()
+
+end 
+
+def next_week(arguement)
+
+end
+
+def prev_week(argument)
+
+end
+
+def exit()
+
+end
+
+# ============= Methods ends
+
+# ============= Main Program starts
+
+
+# ============= Main Program starts
+
