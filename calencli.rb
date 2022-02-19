@@ -118,6 +118,7 @@ def print_actions_menu
 end
 
 # =========           ================
+
 def list_events(events)
   puts "-----------------Welcome to CalendLi-------------"
   puts ""
@@ -135,6 +136,8 @@ def list_events(events)
     end
 
   end
+=======
+
 
 end
 # "id" => (id = id.next),
@@ -148,23 +151,68 @@ end
 def create_event(events)
   print "date: "
   date = gets.chomp # YYYY-MM-DD (REQUIRED)
+  
+  while date == ""
+    puts "Type a valid date: YYYY-MM-DD"
+    print "date: "
+    date = gets.chomp # YYYY-MM-DD (REQUIRED)
+  end
+
   print "title: "
   title = gets.chomp # TEXT (REQUIRED)
+
+  while title == ""
+    puts "Cannot be blank"
+    print "title: "
+    title = gets.chomp # TEXT (REQUIRED)
+  end
+
   print "calendar: "
   calendar = gets.chomp # tech/english/soft skills
+
   print "start_end: "
   start_end = gets.chomp # 23:00 23:30
+  validation = true
+  while validation
+    start_end_arr = start_end.split(/[\s,:]/).map(&:to_i) # los separo por espacio(\s) y por ":" 
+    if start_end_arr.length == 4
+      # valido que la hora de inicio sea menor que la hora de término
+      if start_end_arr[0]<start_end_arr[2]
+        validation = false
+      else
+        puts "Cannot end before start"
+        print "start_end: "
+        start_end = gets.chomp # 23:00 23:30
+      end
+    elsif start_end.empty?
+      validation = false
+    else
+      puts "Format: 'HH:MM HH:MM' or leave it empty"
+      print "start_end: "
+      start_end = gets.chomp # 23:00 23:30
+    end
+  end
+
   print "notes: "
   notes = gets.chomp # TEXT
   print "guests: "
   guests = gets.chomp # NAMES (fabio, leandro)
 
-  date_arr = date.split("-").map(&:to_i) # divido el date por guiones 
-  start_end_arr = start_end.split(/[\s,:]/).map(&:to_i) # los separo por espacio(\s) y por ":"
-  start_date = DateTime.new(date_arr[0],date_arr[1],date_arr[2],start_end_arr[0],start_end_arr[1], 0,"-5").to_s
-  end_date = DateTime.new(date_arr[0],date_arr[1],date_arr[2],start_end_arr[2],start_end_arr[3], 0,"-5").to_s
+  # Condiciones en caso el usuario no ingrese valores de start_end
+  start_end_arr = [0,0,0,0] if start_end_arr.length == 0
+  end_date = ""
+  # ======= Terminan las condiciones 
 
-  id = events.last["id"]
+  date_arr = date.split("-").map(&:to_i) # divido el date por guiones 
+  
+  unless start_end == ""
+    # En caso el usuario sí haya ingresado valores y estos hayan sido validados
+    end_date = DateTime.new(date_arr[0],date_arr[1],date_arr[2],start_end_arr[2],start_end_arr[3], 0,"-5").to_s    
+  end
+
+  start_date = DateTime.new(date_arr[0],date_arr[1],date_arr[2],start_end_arr[0],start_end_arr[1], 0,"-5").to_s
+  
+  id = events.last["id"] # el último id del array
 
   hash_create = {
     "id" => (id = id.next),
@@ -175,29 +223,26 @@ def create_event(events)
     "guests" => guests.split(" "),
     "calendar" => ""
   }
-  puts events
+  
   events.append(hash_create)
-  puts events
+  
 end
 
 # =========           ================
 
-def show_event(argument)
-
-end
-
-# =========           ================
 
 def update_event(argument)
+  
 
 end
 
 # =========           ================
 
-def delete_event(event_id)
-  events.delete(events[event_id])
-  list_actions
-  
+def delete_event(calendar,event_id)
+   for i in calendar
+    calendar.delete(i) if i["id"] == event_id.to_i
+  end  
+#  events.delete(events[event_id])
 end 
 
 # =========           ================
@@ -210,6 +255,27 @@ end
 
 def prev_week(argument)
 
+end
+
+# =========           ================
+
+def show_event(events,event_id)
+
+  for event in events 
+    if event["id"] == event_id.to_i
+     puts  "date: #{event["start_date"][0..9]}"
+     puts "title: #{event["title"]}"
+     puts "calendar: #{event["calendar"]}"
+
+      if event["end_date"] == ""
+        start_end = "00:00 - 23:59"
+      else
+        start_end = event["start_date"].slice(11,5) + " " + event["end_date"].slice(11,5) 
+      end
+      puts "start_end:#{start_end} "
+     puts "notes: #{event["notes"]}"
+   end
+  end   
 end
 
 # ============= Methods ends
@@ -226,21 +292,26 @@ while action != "exit"
   case action
   # ===========LIST ACTION ===========
   when "list"
+
     list_events(events)
+
     print_actions_menu
     puts "list "
   # ========== CREATE action ======
   when "create"
 
-
     #funciona de create pendiente
-    print_actions_menu
+    # print_actions_menu
+    create_event(events)
     puts "create"
   # ========== SHOW ACTION ===========
   when "show"
 
+    print "Event id: "
+    event_id = gets.chomp.to_i
+    show_event(events,event_id)
     print_actions_menu
-    puts "Event ID "
+
   # ========== Update Action=========
   when "update"
 
@@ -248,9 +319,12 @@ while action != "exit"
     puts "update"
   # ========== DELETE Action ==========
   when "delete"
-    delete_event()
+    
+    print "Event ID: "
+    delete_id = gets.chomp
+    delete_event(events, delete_id)
     print_actions_menu
-    puts "Event ID"
+    
   # =========== Next =========
   when "next"
 
