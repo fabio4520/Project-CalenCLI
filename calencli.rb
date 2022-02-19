@@ -105,6 +105,8 @@ events = [
     "calendar" => "web-dev" },
 ]
 
+initial_week = DateTime.parse(events[0]["start_date"]).cweek
+
 # ============Data End============
 
 #==========Methods- Start===========
@@ -113,40 +115,50 @@ events = [
 # Method ACTION MENU
 def print_actions_menu
   puts "-"*65
-  puts " list | create | show | update | delete | next | prev | next " 
+  puts " list | create | show | update | delete | next | prev | exit " 
   puts ""
 end
 
 # =========           ================
 
-def list_events(events)
+def list_events(events, week)
   puts "-----------------Welcome to CalendLi-------------"
   puts ""
-  events.each do |event|
+  for i in 1..12
+    for j in 1..31
+      begin
+        date = Date.new(2021,i, j)
+      rescue
+      else
+        date = Date.new(2021,i,j)
+      end
+      
+      puts date.strftime('%a %b %d') if date.cweek == week
 
-    a = DateTime.parse(event["start_date"])
-    initial_week = a.cweek
-    hora = " "*16   
-    if event["end_date"] == "" && a.cweek == initial_week
-      puts "#{a.strftime('%a %b %d')}" + hora + event["title"]
-    else
-      b = DateTime.parse(event["end_date"])
-      hora = a.strftime("%I:%M") + " - " + b.strftime("%I:%M") + " "
-      puts "#{a.strftime('%a %b %d')} " + hora + event["title"]
+      for event in events
+        if event["end_date"] == ""
+          hora = "                "
+        else
+          hora = "#{event["start_date"][11..15]} #{event["end_date"][11..15]}"
+        end
+        puts "#{hora} #{event["title"]} (#{event["id"]})" if event["start_date"][0..9] == date.to_s[0..9] && date.cweek == week
+         
+      end
+
+
+      events_per_day = 0
+      events.each {|event| events_per_day += 1 if event["start_date"][0..9] == date.to_s[0..9] && date.cweek == week}
+      
+      puts "No events" if events_per_day == 0 && date.cweek == week
+
+
+        
     end
-
   end
-=======
+
 
 
 end
-# "id" => (id = id.next),
-#     "start_date" => "2021-11-15T00:00:00-05:00",
-#     "title" => "Ruby Basics 1",
-#     "end_date" => "",
-#     "notes" => "Ruby Basics 1 notes",
-#     "guests" => %w[Teddy Codeka],
-#     "calendar" => "web-dev" },
 
 def create_event(events)
   print "date: "
@@ -158,6 +170,8 @@ def create_event(events)
     date = gets.chomp # YYYY-MM-DD (REQUIRED)
   end
 
+
+
   print "title: "
   title = gets.chomp # TEXT (REQUIRED)
 
@@ -167,6 +181,8 @@ def create_event(events)
     title = gets.chomp # TEXT (REQUIRED)
   end
 
+
+  
   print "calendar: "
   calendar = gets.chomp # tech/english/soft skills
 
@@ -247,18 +263,6 @@ end
 
 # =========           ================
 
-def next_week(arguement)
-
-end
-
-# =========           ================
-
-def prev_week(argument)
-
-end
-
-# =========           ================
-
 def show_event(events,event_id)
 
   for event in events 
@@ -293,7 +297,7 @@ while action != "exit"
   # ===========LIST ACTION ===========
   when "list"
 
-    list_events(events)
+    list_events(events, initial_week)
 
     print_actions_menu
     puts "list "
@@ -327,12 +331,14 @@ while action != "exit"
     
   # =========== Next =========
   when "next"
-
+    initial_week += 1
+    list_events(events, initial_week)
     print_actions_menu
     puts "next"
   # =========== Prev  =========
   when "prev"
-
+    initial_week -= 1
+    list_events(events, initial_week)
     print_actions_menu
     puts "prev"
   # ======== invalid action =====
