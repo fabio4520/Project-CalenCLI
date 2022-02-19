@@ -119,17 +119,34 @@ end
 
 # =========           ================
 
-def events_list(events)
-
+def list_events(events)
   puts "-----------------Welcome to CalendLi-------------"
   puts ""
-  #events.each do |event|
-  print daynames[1][1..3]
+  events.each do |event|
 
-  #puts "#{event["id"]}. #{event["start_date"]}" 
-  
+    a = DateTime.parse(event["start_date"])
+    initial_week = a.cweek
+    hora = " "*16   
+    if event["end_date"] == "" && a.cweek == initial_week
+      puts "#{a.strftime('%a %b %d')}" + hora + event["title"]
+    else
+      b = DateTime.parse(event["end_date"])
+      hora = a.strftime("%I:%M") + " - " + b.strftime("%I:%M") + " "
+      puts "#{a.strftime('%a %b %d')} " + hora + event["title"]
+    end
+
+  end
+=======
+
+
 end
-
+# "id" => (id = id.next),
+#     "start_date" => "2021-11-15T00:00:00-05:00",
+#     "title" => "Ruby Basics 1",
+#     "end_date" => "",
+#     "notes" => "Ruby Basics 1 notes",
+#     "guests" => %w[Teddy Codeka],
+#     "calendar" => "web-dev" },
 
 def create_event(events)
   print "date: "
@@ -276,7 +293,7 @@ while action != "exit"
   # ===========LIST ACTION ===========
   when "list"
 
-    events_list(events)
+    list_events(events)
 
     print_actions_menu
     puts "list "
