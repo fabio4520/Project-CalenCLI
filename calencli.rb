@@ -118,12 +118,16 @@ def print_actions_menu
 end
 
 # =========           ================
+
 def events_list(events)
+
   puts "-----------------Welcome to CalendLi-------------"
   puts ""
-  events.each do |event|
-  puts "#{event["id"]}. #{event["start_date"]}" 
-  end
+  #events.each do |event|
+  print daynames[1][1..3]
+
+  #puts "#{event["id"]}. #{event["start_date"]}" 
+  
 end
 
 
@@ -209,6 +213,35 @@ end
 
 # =========           ================
 
+
+def update_event(argument)
+  
+
+end
+
+# =========           ================
+
+def delete_event(calendar,event_id)
+   for i in calendar
+    calendar.delete(i) if i["id"] == event_id.to_i
+  end  
+#  events.delete(events[event_id])
+end 
+
+# =========           ================
+
+def next_week(arguement)
+
+end
+
+# =========           ================
+
+def prev_week(argument)
+
+end
+
+# =========           ================
+
 def show_event(events,event_id)
 
   for event in events 
@@ -225,39 +258,7 @@ def show_event(events,event_id)
       puts "start_end:#{start_end} "
      puts "notes: #{event["notes"]}"
    end
-  end 
-    
-  
-
-  
-
-
-end
-
-# =========           ================
-
-def update_event(argument)
-
-end
-
-# =========           ================
-
-def delete_event(event_id)
-  events.delete(events[event_id])
-  list_actions
-  
-end 
-
-# =========           ================
-
-def next_week(arguement)
-
-end
-
-# =========           ================
-
-def prev_week(argument)
-
+  end   
 end
 
 # ============= Methods ends
@@ -274,7 +275,9 @@ while action != "exit"
   case action
   # ===========LIST ACTION ===========
   when "list"
+
     events_list(events)
+
     print_actions_menu
     puts "list "
   # ========== CREATE action ======
@@ -286,10 +289,12 @@ while action != "exit"
     puts "create"
   # ========== SHOW ACTION ===========
   when "show"
+
     print "Event id: "
     event_id = gets.chomp.to_i
     show_event(events,event_id)
     print_actions_menu
+
   # ========== Update Action=========
   when "update"
 
@@ -297,9 +302,12 @@ while action != "exit"
     puts "update"
   # ========== DELETE Action ==========
   when "delete"
-    delete_event()
+    
+    print "Event ID: "
+    delete_id = gets.chomp
+    delete_event(events, delete_id)
     print_actions_menu
-    puts "Event ID"
+    
   # =========== Next =========
   when "next"
 
