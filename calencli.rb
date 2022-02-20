@@ -114,8 +114,8 @@ initial_week = DateTime.parse(events[0]["start_date"]).cweek
 
 # Method ACTION MENU
 def print_actions_menu
-  puts "-"*65
-  puts " list | create | show | update | delete | next | prev | exit " 
+  puts "-" * 65
+  puts " list | create | show | update | delete | next | prev | exit "
   puts ""
 end
 
@@ -127,63 +127,58 @@ def list_events(events, week)
   for i in 1..12
     for j in 1..31
       begin
-        date = Date.new(2021,i, j)
+        date = Date.new(2021, i, j)
       rescue
       else
-        date = Date.new(2021,i,j)
+        date = Date.new(2021, i, j)
       end
-      
 
       print date.strftime('%a %b %d') if date.cweek == week
 
-      
       full_day_events = []
       hour_day_events = []
 
       a = false
 
       for event in events
-        if event["end_date"] == "" && Date.new(event["start_date"][0..3].to_i, event["start_date"][5..6].to_i, event["start_date"][8..9].to_i).cweek == week
+        if event["end_date"] == "" && Date.new(event["start_date"][0..3].to_i, event["start_date"][5..6].to_i,
+                                               event["start_date"][8..9].to_i).cweek == week
           hora = "                "
-          full_day_events.append([event["title"],hora,event["id"],event["start_date"]])
-  #       puts "#{hora} #{event["title"]} (#{event["id"]})" if event["start_date"][0..9] == date.to_s[0..9] && date.cweek == week
-        elsif Date.new(event["start_date"][0..3].to_i, event["start_date"][5..6].to_i, event["start_date"][8..9].to_i).cweek == week
+          full_day_events.append([event["title"], hora, event["id"], event["start_date"]])
+        #       puts "#{hora} #{event["title"]} (#{event["id"]})" if event["start_date"][0..9] == date.to_s[0..9] && date.cweek == week
+        elsif Date.new(event["start_date"][0..3].to_i, event["start_date"][5..6].to_i,
+                       event["start_date"][8..9].to_i).cweek == week
           hora = "#{event["start_date"][11..15]} #{event["end_date"][11..15]}"
           a = false
-   #       puts "#{hora} #{event["title"]} (#{event["id"]})" if event["start_date"][0..9] == date.to_s[0..9] && date.cweek == week
-          hour_day_events.append([event["title"],hora,event["id"],event["start_date"]])
+          #       puts "#{hora} #{event["title"]} (#{event["id"]})" if event["start_date"][0..9] == date.to_s[0..9] && date.cweek == week
+          hour_day_events.append([event["title"], hora, event["id"], event["start_date"]])
         end
-        
+
       end
       full_day_events = full_day_events.uniq
       hour_day_events = hour_day_events.uniq
 
-      full_day_events.each{|x|  puts "#{x[1]}    #{x[0]} (#{x[2]})"  if x[3][0..9] == date.to_s[0..9] }
+      full_day_events.each { |x| puts "#{x[1]}    #{x[0]} (#{x[2]})" if x[3][0..9] == date.to_s[0..9] }
 
-      hour_day_events.each{|x| puts "#{x[1]} #{x[0]} (#{x[2]})" if x[3][0..9] == date.to_s[0..9] }
+      hour_day_events.each { |x| puts "#{x[1]} #{x[0]} (#{x[2]})" if x[3][0..9] == date.to_s[0..9] }
       events_per_day = 0
-      events.each {|event| events_per_day += 1 if event["start_date"][0..9] == date.to_s[0..9] && date.cweek == week}
-      
+      events.each { |event| events_per_day += 1 if event["start_date"][0..9] == date.to_s[0..9] && date.cweek == week }
+
       puts "                No events" if events_per_day == 0 && date.cweek == week
 
-
-      
     end
   end
-
 end
 
 def create_event(events)
   print "date: "
   date = gets.chomp # YYYY-MM-DD (REQUIRED)
-  
+
   while date == ""
     puts "Type a valid date: YYYY-MM-DD"
     print "date: "
     date = gets.chomp # YYYY-MM-DD (REQUIRED)
   end
-
-
 
   print "title: "
   title = gets.chomp # TEXT (REQUIRED)
@@ -194,8 +189,6 @@ def create_event(events)
     title = gets.chomp # TEXT (REQUIRED)
   end
 
-
-  
   print "calendar: "
   calendar = gets.chomp # tech/english/soft skills
 
@@ -203,10 +196,10 @@ def create_event(events)
   start_end = gets.chomp # 23:00 23:30
   validation = true
   while validation
-    start_end_arr = start_end.split(/[\s,:]/).map(&:to_i) # los separo por espacio(\s) y por ":" 
+    start_end_arr = start_end.split(/[\s,:]/).map(&:to_i) # los separo por espacio(\s) y por ":"
     if start_end_arr.length == 4
       # valido que la hora de inicio sea menor que la hora de término
-      if start_end_arr[0]<start_end_arr[2]
+      if start_end_arr[0] < start_end_arr[2]
         validation = false
       else
         puts "Cannot end before start"
@@ -228,19 +221,19 @@ def create_event(events)
   guests = gets.chomp # NAMES (fabio, leandro)
 
   # Condiciones en caso el usuario no ingrese valores de start_end
-  start_end_arr = [0,0,0,0] if start_end_arr.length == 0
+  start_end_arr = [0, 0, 0, 0] if start_end_arr.length == 0
   end_date = ""
-  # ======= Terminan las condiciones 
+  # ======= Terminan las condiciones
 
-  date_arr = date.split("-").map(&:to_i) # divido el date por guiones 
-  
+  date_arr = date.split("-").map(&:to_i) # divido el date por guiones
+
   unless start_end == ""
     # En caso el usuario sí haya ingresado valores y estos hayan sido validados
-    end_date = DateTime.new(date_arr[0],date_arr[1],date_arr[2],start_end_arr[2],start_end_arr[3], 0,"-5").to_s    
+    end_date = DateTime.new(date_arr[0], date_arr[1], date_arr[2], start_end_arr[2], start_end_arr[3], 0, "-5").to_s
   end
 
-  start_date = DateTime.new(date_arr[0],date_arr[1],date_arr[2],start_end_arr[0],start_end_arr[1], 0,"-5").to_s
-  
+  start_date = DateTime.new(date_arr[0], date_arr[1], date_arr[2], start_end_arr[0], start_end_arr[1], 0, "-5").to_s
+
   id = events.last["id"] # el último id del array
 
   hash_create = {
@@ -254,17 +247,14 @@ def create_event(events)
   }
 
   events.append(hash_create)
-  
 end
 
 # =========           ================
 
-
 def update_event(hashes, update_id)
-
   print "date: "
   date = gets.chomp # YYYY-MM-DD (REQUIRED)
-  
+
   while date == ""
     puts "Type a valid date: YYYY-MM-DD"
     print "date: "
@@ -287,10 +277,10 @@ def update_event(hashes, update_id)
   start_end = gets.chomp # 23:00 23:30
   validation = true
   while validation
-    start_end_arr = start_end.split(/[\s,:]/).map(&:to_i) # los separo por espacio(\s) y por ":" 
+    start_end_arr = start_end.split(/[\s,:]/).map(&:to_i) # los separo por espacio(\s) y por ":"
     if start_end_arr.length == 4
       # valido que la hora de inicio sea menor que la hora de término
-      if start_end_arr[0]<start_end_arr[2]
+      if start_end_arr[0] < start_end_arr[2]
         validation = false
       else
         puts "Cannot end before start"
@@ -312,19 +302,19 @@ def update_event(hashes, update_id)
   guests = gets.chomp # NAMES (fabio, leandro)
 
   # Condiciones en caso el usuario no ingrese valores de start_end
-  start_end_arr = [0,0,0,0] if start_end_arr.length == 0
+  start_end_arr = [0, 0, 0, 0] if start_end_arr.length == 0
   end_date = ""
-  # ======= Terminan las condiciones 
+  # ======= Terminan las condiciones
 
-  date_arr = date.split("-").map(&:to_i) # divido el date por guiones 
-  
+  date_arr = date.split("-").map(&:to_i) # divido el date por guiones
+
   unless start_end == ""
     # En caso el usuario sí haya ingresado valores y estos hayan sido validados
-    end_date = DateTime.new(date_arr[0],date_arr[1],date_arr[2],start_end_arr[2],start_end_arr[3], 0,"-5").to_s    
+    end_date = DateTime.new(date_arr[0], date_arr[1], date_arr[2], start_end_arr[2], start_end_arr[3], 0, "-5").to_s
   end
 
-  start_date = DateTime.new(date_arr[0],date_arr[1],date_arr[2],start_end_arr[0],start_end_arr[1], 0,"-5").to_s
-  
+  start_date = DateTime.new(date_arr[0], date_arr[1], date_arr[2], start_end_arr[0], start_end_arr[1], 0, "-5").to_s
+
   for x in hashes
     if x["id"] == update_id
       x["start_date"] = start_date
@@ -335,45 +325,38 @@ def update_event(hashes, update_id)
       x["calendar"] = calendar
     end
   end
-
-
- 
-  
-
 end
 
 # =========           ================
 
-def delete_event(calendar,event_id)
-   for i in calendar
+def delete_event(calendar, event_id)
+  for i in calendar
     calendar.delete(i) if i["id"] == event_id.to_i
-  end  
-#  events.delete(events[event_id])
-end 
+ end
+  #  events.delete(events[event_id])
+end
 
 # =========           ================
 
-def show_event(events,event_id)
-
-  for event in events 
+def show_event(events, event_id)
+  for event in events
     if event["id"] == event_id.to_i
-     puts  "date: #{event["start_date"][0..9]}"
-     puts "title: #{event["title"]}"
-     puts "calendar: #{event["calendar"]}"
+      puts "date: #{event["start_date"][0..9]}"
+      puts "title: #{event["title"]}"
+      puts "calendar: #{event["calendar"]}"
 
       if event["end_date"] == ""
         start_end = "00:00 - 23:59"
       else
-        start_end = event["start_date"].slice(11,5) + " " + event["end_date"].slice(11,5) 
+        start_end = event["start_date"].slice(11, 5) + " " + event["end_date"].slice(11, 5)
       end
       puts "start_end:#{start_end} "
-     puts "notes: #{event["notes"]}"
-   end
-  end   
+      puts "notes: #{event["notes"]}"
+    end
+  end
 end
 
 # ============= Methods ends
-
 
 # ============= Main Program starts
 
@@ -381,8 +364,8 @@ end
 action = nil
 while action != "exit"
   print "action:   "
-  action = gets.chomp 
-  #capture the action as a <string>
+  action = gets.chomp
+  # capture the action as a <string>
   case action
   # ===========LIST ACTION ===========
   when "list"
@@ -394,7 +377,7 @@ while action != "exit"
   # ========== CREATE action ======
   when "create"
 
-    #funciona de create pendiente
+    # funciona de create pendiente
     # print_actions_menu
     create_event(events)
     puts "create"
@@ -403,24 +386,24 @@ while action != "exit"
 
     print "Event id: "
     event_id = gets.chomp.to_i
-    show_event(events,event_id)
+    show_event(events, event_id)
     print_actions_menu
 
   # ========== Update Action=========
   when "update"
     print "Event id: "
     update_id = gets.chomp.to_i
-    update_event(events,update_id)
-    list_events(events,initial_week)
+    update_event(events, update_id)
+    list_events(events, initial_week)
 
   # ========== DELETE Action ==========
   when "delete"
-    
+
     print "Event ID: "
     delete_id = gets.chomp
     delete_event(events, delete_id)
     print_actions_menu
-    
+
   # =========== Next =========
   when "next"
     initial_week += 1
@@ -437,10 +420,9 @@ while action != "exit"
   when "exit"
     puts "Thanks for using calenCLI"
   # ======== invalid action =====
-  else 
+  else
     puts "invalid action"
-  end 
+  end
 end
 
 # ============= Main Program starts
-
