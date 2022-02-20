@@ -350,6 +350,7 @@ def show_event(events, event_id)
     start_end = "00:00 - 23:59" if event["end_date"] == ""
     puts "start_end: #{start_end} "
     puts "notes: #{event['notes']}"
+    puts "guests: #{event['guests'].join(',')}"
   end
 end
 
