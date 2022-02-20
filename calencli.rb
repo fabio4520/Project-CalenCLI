@@ -133,6 +133,7 @@ def list_events(events, week)
         date = Date.new(2021,i,j)
       end
       
+
       print date.strftime('%a %b %d') if date.cweek == week
 
       
@@ -165,6 +166,7 @@ def list_events(events, week)
       
       puts "                No events" if events_per_day == 0 && date.cweek == week
 
+
       
     end
   end
@@ -181,6 +183,8 @@ def create_event(events)
     date = gets.chomp # YYYY-MM-DD (REQUIRED)
   end
 
+
+
   print "title: "
   title = gets.chomp # TEXT (REQUIRED)
 
@@ -190,6 +194,8 @@ def create_event(events)
     title = gets.chomp # TEXT (REQUIRED)
   end
 
+
+  
   print "calendar: "
   calendar = gets.chomp # tech/english/soft skills
 
