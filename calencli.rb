@@ -1,4 +1,4 @@
-require 'date'
+require "date"
 # ==============Data start
 id = 0
 
@@ -102,7 +102,7 @@ events = [
     "end_date" => "",
     "notes" => "",
     "guests" => [],
-    "calendar" => "web-dev" },
+    "calendar" => "web-dev" }
 ]
 
 initial_week = DateTime.parse(events[0]["start_date"]).cweek
@@ -118,54 +118,57 @@ def print_actions_menu
   puts " list | create | show | update | delete | next | prev | exit "
   puts ""
 end
+# =========           ================
+
+def full_hour_array(events, week, full_day_events, hour_day_events)
+  events.each do |event|
+    if event["end_date"] == "" && Date.new(event["start_date"][0..3].to_i, event["start_date"][5..6].to_i,
+                                           event["start_date"][8..9].to_i).cweek == week
+      hora = "                "
+      full_day_events.append([event["title"], hora, event["id"], event["start_date"]])
+    elsif Date.new(event["start_date"][0..3].to_i, event["start_date"][5..6].to_i,
+                   event["start_date"][8..9].to_i).cweek == week
+      hora = "#{event['start_date'][11..15]} #{event['end_date'][11..15]}"
+      hour_day_events.append([event["title"], hora, event["id"], event["start_date"]])
+    end
+  end
+end
+
+# =========           ================
+
+def list_events_print(events, date, week)
+  full_day_events = []
+  hour_day_events = []
+  full_hour_array(events, week, full_day_events, hour_day_events)
+  full_day_events = full_day_events.uniq
+  hour_day_events = hour_day_events.uniq
+
+  full_day_events.each { |x| puts "#{x[1]}    #{x[0]} (#{x[2]})" if x[3][0..9] == date.to_s[0..9] }
+  hour_day_events.each { |x| puts "          #{x[1]} #{x[0]} (#{x[2]})" if x[3][0..9] == date.to_s[0..9] }
+
+  events_per_day = 0
+  events.each { |event| events_per_day += 1 if event["start_date"][0..9] == date.to_s[0..9] && date.cweek == week }
+  puts "                    No events" if events_per_day.zero? && date.cweek == week
+end
 
 # =========           ================
 
 def list_events(events, week)
   puts "-----------------Welcome to CalendLi-------------"
   puts ""
-  for i in 1..12
-    for j in 1..31
+  (1..12).each do |i|
+    (1..31).each do |j|
+      date = Date.new(2021, 1, 1)
       begin
         date = Date.new(2021, i, j)
-      rescue
+      rescue StandardError
+        nil
       else
         date = Date.new(2021, i, j)
       end
-
-      print date.strftime('%a %b %d') if date.cweek == week
-
-      full_day_events = []
-      hour_day_events = []
-
-      a = false
-
-      for event in events
-        if event["end_date"] == "" && Date.new(event["start_date"][0..3].to_i, event["start_date"][5..6].to_i,
-                                               event["start_date"][8..9].to_i).cweek == week
-          hora = "                "
-          full_day_events.append([event["title"], hora, event["id"], event["start_date"]])
-        #       puts "#{hora} #{event["title"]} (#{event["id"]})" if event["start_date"][0..9] == date.to_s[0..9] && date.cweek == week
-        elsif Date.new(event["start_date"][0..3].to_i, event["start_date"][5..6].to_i,
-                       event["start_date"][8..9].to_i).cweek == week
-          hora = "#{event["start_date"][11..15]} #{event["end_date"][11..15]}"
-          a = false
-          #       puts "#{hora} #{event["title"]} (#{event["id"]})" if event["start_date"][0..9] == date.to_s[0..9] && date.cweek == week
-          hour_day_events.append([event["title"], hora, event["id"], event["start_date"]])
-        end
-
-      end
-      full_day_events = full_day_events.uniq
-      hour_day_events = hour_day_events.uniq
-
-      full_day_events.each { |x| puts "#{x[1]}    #{x[0]} (#{x[2]})" if x[3][0..9] == date.to_s[0..9] }
-
-      hour_day_events.each { |x| puts "#{x[1]} #{x[0]} (#{x[2]})" if x[3][0..9] == date.to_s[0..9] }
-      events_per_day = 0
-      events.each { |event| events_per_day += 1 if event["start_date"][0..9] == date.to_s[0..9] && date.cweek == week }
-
-      puts "                No events" if events_per_day == 0 && date.cweek == week
-
+      # puts date
+      print date.strftime("%a %b %d") if date.cweek == week
+      list_events_print(events, date, week)
     end
   end
 end
@@ -221,7 +224,7 @@ def create_event(events)
   guests = gets.chomp # NAMES (fabio, leandro)
 
   # Condiciones en caso el usuario no ingrese valores de start_end
-  start_end_arr = [0, 0, 0, 0] if start_end_arr.length == 0
+  start_end_arr = [0, 0, 0, 0] if start_end_arr.length.zero?
   end_date = ""
   # ======= Terminan las condiciones
 
@@ -242,8 +245,8 @@ def create_event(events)
     "title" => title,
     "end_date" => end_date,
     "notes" => notes,
-    "guests" => guests.split(" "),
-    "calendar" => ""
+    "guests" => guests.split,
+    "calendar" => calendar
   }
 
   events.append(hash_create)
@@ -302,7 +305,7 @@ def update_event(hashes, update_id)
   guests = gets.chomp # NAMES (fabio, leandro)
 
   # Condiciones en caso el usuario no ingrese valores de start_end
-  start_end_arr = [0, 0, 0, 0] if start_end_arr.length == 0
+  start_end_arr = [0, 0, 0, 0] if start_end_arr.length.zero?
   end_date = ""
   # ======= Terminan las condiciones
 
@@ -315,44 +318,38 @@ def update_event(hashes, update_id)
 
   start_date = DateTime.new(date_arr[0], date_arr[1], date_arr[2], start_end_arr[0], start_end_arr[1], 0, "-5").to_s
 
-  for x in hashes
-    if x["id"] == update_id
-      x["start_date"] = start_date
-      x["title"] = title
-      x["end_date"] = end_date
-      x["notes"] = notes
-      x["guest"] = guests.split(" ")
-      x["calendar"] = calendar
-    end
+  hashes.each do |x|
+    x["start_date"] = start_date
+    x["title"] = title
+    x["end_date"] = end_date
+    x["notes"] = notes
+    x["guest"] = guests.split
+    x["calendar"] = calendar if x["id"] == update_id
   end
 end
 
 # =========           ================
 
 def delete_event(calendar, event_id)
-  for i in calendar
+  calendar.each do |i|
     calendar.delete(i) if i["id"] == event_id.to_i
- end
+  end
   #  events.delete(events[event_id])
 end
 
 # =========           ================
 
 def show_event(events, event_id)
-  for event in events
-    if event["id"] == event_id.to_i
-      puts "date: #{event["start_date"][0..9]}"
-      puts "title: #{event["title"]}"
-      puts "calendar: #{event["calendar"]}"
+  events.each do |event|
+    next unless event["id"] == event_id.to_i
 
-      if event["end_date"] == ""
-        start_end = "00:00 - 23:59"
-      else
-        start_end = event["start_date"].slice(11, 5) + " " + event["end_date"].slice(11, 5)
-      end
-      puts "start_end:#{start_end} "
-      puts "notes: #{event["notes"]}"
-    end
+    puts "date: #{event['start_date'][0..9]}"
+    puts "title: #{event['title']}"
+    puts "calendar: #{event['calendar']}"
+    start_end = "#{event['start_date'].slice(11, 5)} #{event['end_date'].slice(11, 5)}"
+    start_end = "00:00 - 23:59" if event["end_date"] == ""
+    puts "start_end: #{start_end} "
+    puts "notes: #{event['notes']}"
   end
 end
 
@@ -361,33 +358,27 @@ end
 # ============= Main Program starts
 
 # ======== ACTION ==========
+list_events(events, initial_week)
+print_actions_menu
 action = nil
+
 while action != "exit"
   print "action:   "
   action = gets.chomp
-  # capture the action as a <string>
   case action
   # ===========LIST ACTION ===========
   when "list"
-
     list_events(events, initial_week)
-
-    print_actions_menu
-    puts "list "
   # ========== CREATE action ======
   when "create"
-
     # funciona de create pendiente
     # print_actions_menu
     create_event(events)
-    puts "create"
   # ========== SHOW ACTION ===========
   when "show"
-
     print "Event id: "
     event_id = gets.chomp.to_i
     show_event(events, event_id)
-    print_actions_menu
 
   # ========== Update Action=========
   when "update"
@@ -398,24 +389,18 @@ while action != "exit"
 
   # ========== DELETE Action ==========
   when "delete"
-
     print "Event ID: "
     delete_id = gets.chomp
     delete_event(events, delete_id)
-    print_actions_menu
 
   # =========== Next =========
   when "next"
     initial_week += 1
     list_events(events, initial_week)
-    print_actions_menu
-    puts "next"
   # =========== Prev  =========
   when "prev"
     initial_week -= 1
     list_events(events, initial_week)
-    print_actions_menu
-    puts "prev"
   # ======== invalid action =====
   when "exit"
     puts "Thanks for using calenCLI"
@@ -423,6 +408,7 @@ while action != "exit"
   else
     puts "invalid action"
   end
+  print_actions_menu
 end
 
 # ============= Main Program starts
